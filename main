@@ -1,31 +1,26 @@
 #!/bin/bash
-#PBS -l nodes=1:ppn=8,vmem=16gb,walltime=12:00:00
+#PBS -l nodes=1:ppn=8,vmem=16gb,walltime=02:00:00
 #PBS -N BROCCOLI
 #PBS -V
 
 set -e
 set -x
 
-export FREESURFER_LICENSE="hayashis@iu.edu 29511 *CPmh9xvKQKHE FSg0ijTusqaQc"
-echo $FREESURFER_LICENSE > license.txt
-
 mkdir -p output
 
 #convert input into bids
-#bl2bids
+bl2bids
 
-#docker run -i --rm \
-#    -v /Users/yourname/data/ds005:/bids_dataset \
-#    -v /Users/yourname/outputs:/outputs \
-#    bids/broccoli:v1.0.0 \
-#    /bids_dataset /outputs participant 
-
+sub=$(jq -r "._inputs[0].meta.subject" config.json | tr -d "_")
+if [[ -z $sub || $sub == null ]]; then
+    sub=0
+fi
 
 singularity run \
   -B `pwd`/bids:/bids \
   -B `pwd`/output:/output \
   docker://bids/broccoli:v1.0.0 \
-  /bids /output participant --participant_label 10
+  /bids /output participant --participant_label $sub
 
 
 
