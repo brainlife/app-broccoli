@@ -1,0 +1,21 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=8,vmem=16gb,walltime=12:00:00
+#PBS -N BROCCOLI
+#PBS -V
+
+set -e
+set -x
+
+mkdir -p output
+
+#convert input into bids
+#bl2bids
+
+time singularity run --nv -e \
+  -B `pwd`/data/ds000003_R2.0.2:/bids \
+  -B `pwd`/output:/output \
+  docker://bids/broccoli:v1.0.0 \
+  /bids /output participant --participant_label 10
+
+
+
