@@ -29,3 +29,5 @@ tscores=output/sub-${sub}/rhymejudgment/sub-${sub}_tscores_contrast0001_MNI.nii
 
 singularity exec -e docker://brainlife/fsl:6.0.4 fslmaths $tscores -thr 5 output/sub-${sub}/activation_map_MNI.nii.gz
 
+mkdir -p map
+cp output/sub-${sub}/activation_map_MNI.nii.gz map/mask.nii.gz #temporary mask datatype
