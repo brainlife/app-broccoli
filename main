@@ -16,6 +16,8 @@ if [[ -z $sub || $sub == null ]]; then
     sub=0
 fi
 
+cp bids/sub-${sub}/func/sub-${sub}_task-rhymejudgment_bold.json bids/task-rhymejudgment_bold.json
+
 time singularity run --nv -e \
   -B `pwd`/bids:/bids \
   -B `pwd`/output:/output \
