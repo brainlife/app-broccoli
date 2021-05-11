@@ -16,16 +16,18 @@ if [[ -z $sub || $sub == null ]]; then
     sub=0
 fi
 
-cp bids/sub-${sub}/func/sub-${sub}_task-rhymejudgment_bold.json bids/task-rhymejudgment_bold.json
+taskname=$(jq -r '._inputs[] | select(.id == "fmri") | .meta.task' config.json)
+echo "task: $taskname"
+
+mkdir -p regress
+bold_json=$(find bids/sub-${sub}/func -name "*_bold.json")
+[[ -f $bold_json ]] && cp $bold_json bids/task-${taskname}_bold.json
 
 time singularity run --nv -e \
   -B `pwd`/bids:/bids \
   -B `pwd`/output:/output \
   docker://bids/broccoli:v1.0.0 \
   /bids /output participant --participant_label $sub
-
-#fslmaths '/N/project/plab/giulia/data/output_broccoli/sub-01_tscores_contrast0001_MNI.nii' -thr 5 '/N/project/plab/giulia/data/output_broccoli/sub-01_tscores_contrast0001_MNI_thresholded.nii'
-
 
 tscores=output/sub-${sub}/rhymejudgment/sub-${sub}_tscores_contrast0001_MNI.nii
 
