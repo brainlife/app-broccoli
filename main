@@ -19,8 +19,11 @@ fi
 taskname=$(jq -r '._inputs[] | select(.id == "fmri") | .meta.task' config.json)
 echo "task: $taskname"
 
-mkdir -p regress
-bold_json=$(find bids/sub-${sub}/func -name "*_bold.json")
+oDir=bids/sub-$sub
+ses=$(jq -r '._inputs[] | select(.id == "fmri") | .meta.session' config.json)
+[ "$ses" != "null" ] && oDir=$oDir/ses-$ses
+
+bold_json=$(find $oDir/func -name "*_bold.json")
 [[ -f $bold_json ]] && cp $bold_json bids/task-${taskname}_bold.json
 
 time singularity run --nv -e \
