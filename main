@@ -34,7 +34,7 @@ time singularity run --nv -e \
 
 tscores=output/sub-${sub}/$taskname/sub-${sub}_tscores_contrast0001_MNI.nii
 map=output/sub-${sub}/activation_map_MNI.nii.gz
-thr=`jq -r 'thr' config.json`
+thr=`jq -r '.thr' config.json`
 
 #tscores thresholding
 singularity exec -e docker://brainlife/fsl:6.0.4 fslmaths $tscores -thr $thr $map
