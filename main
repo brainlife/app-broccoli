@@ -50,9 +50,7 @@ singularity exec -e docker://brainlife/fsl:6.0.4 bet $t1 output/sub-${sub}/t1_ma
 epi=output/sub-${sub}/$taskname/sub-${sub}_epi_aligned_mni_nonlinear.nii
 singularity exec -e docker://brainlife/fsl:6.0.4 bet $t1 output/sub-${sub}/epi_masked.nii.gz
 
-
 #save overlay figures
-
 time singularity exec -e docker://brainlife/fsleyes:1.0 xvfb-run -s "-screen 0 640x480x24" ./save_figures.sh $map output/sub-${sub}/t1_masked.nii.gz output/sub-${sub}/epi_masked.nii.gz
 
 #store QC graph on product.json
