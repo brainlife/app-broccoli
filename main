@@ -6,7 +6,8 @@
 set -e
 set -x
 
-mkdir -p output
+rm -rf output
+mkdir output
 
 #convert input into bids
 bl2bids
