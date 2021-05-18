@@ -33,18 +33,19 @@ time singularity run --nv -e \
   docker://bids/broccoli:v1.0.0 \
   /bids /output participant --participant_label $sub
 
+#tscores thresholding
 tscores=output/sub-${sub}/$taskname/sub-${sub}_tscores_contrast0001_MNI.nii
 map=output/sub-${sub}/activation_map_MNI.nii.gz
 thr=`jq -r '.thr' config.json`
-
-#tscores thresholding
 singularity exec -e docker://brainlife/fsl:6.0.4 fslmaths $tscores -thr $thr $map
 
 mkdir -p map
 cp output/sub-${sub}/activation_map_MNI.nii.gz map/mask.nii.gz #temporary mask datatype
 
 #save overlay figures
-time singularity exec -e docker://brainlife/fsleyes:1.0 xvfb-run -s "-screen 0 640x480x24" ./save_figures.sh
+t1=output/sub-${sub}/$taskname/sub-${sub}_t1_aligned_mni_nonlinear.nii
+epi=output/sub-${sub}/$taskname/sub-${sub}_epi_aligned_mni_nonlinear.nii
+time singularity exec -e docker://brainlife/fsleyes:1.0 xvfb-run -s "-screen 0 640x480x24" ./save_figures.sh $map $t1 $epi
 
 #store QC graph on product.json
 cat << EOF > product.json
