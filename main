@@ -44,3 +44,21 @@ cp output/sub-${sub}/activation_map_MNI.nii.gz map/mask.nii.gz #temporary mask d
 
 #save overlay figures
 time singularity exec -e docker://brainlife/fsleyes:1.0 xvfb-run -s "-screen 0 640x480x24" ./save_figures.sh
+
+#store QC graph on product.json
+cat << EOF > product.json
+{
+    "brainlife": [
+        { 
+            "type": "image/png", 
+	    "name": "overlay t1 and map",
+            "base64": "$(base64 -w 0 figures/t1_map_mni.png)"
+        },
+        { 
+            "type": "image/png", 
+	    "name": "overlay epi and map",
+            "base64": "$(base64 -w 0 figures/epi_map_mni.png)"
+        }
+    ]
+}
+EOF
