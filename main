@@ -32,7 +32,7 @@ start=`date +%s`
 time singularity run --nv -e \
   -B `pwd`/bids:/bids \
   -B `pwd`/output:/output \
-  docker://bids/broccoli:v1.0.0 \
+  docker://bids/broccoli:v1.0.1 \
   /bids /output participant --participant_label $sub
   
 end=`date +%s`
