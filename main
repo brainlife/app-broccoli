@@ -42,8 +42,9 @@ echo "Runtime for first-level analysis: $runtime seconds"
 #tscores thresholding
 tscores=output/sub-${sub}/$taskname/sub-${sub}_tscores_contrast0001_MNI.nii
 map=output/sub-${sub}/activation_map_MNI.nii.gz
+mask=output/sub-${sub}/$taskname/sub-${sub}_mask_MNI.nii
 thr=`jq -r '.thr' config.json`
-singularity exec -e docker://brainlife/fsl:6.0.4 fslmaths $tscores -thr $thr $map
+singularity exec -e docker://brainlife/fsl:6.0.4 fslmaths $tscores -thr $thr -mas $mask $map
 
 #extract brain from t1
 t1=output/sub-${sub}/$taskname/sub-${sub}_t1_aligned_mni_nonlinear.nii
