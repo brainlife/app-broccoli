@@ -27,11 +27,17 @@ ses=$(jq -r '._inputs[] | select(.id == "fmri") | .meta.session' config.json)
 bold_json=$(find $oDir/func -name "*_bold.json")
 [[ -f $bold_json ]] && cp $bold_json bids/task-${taskname}_bold.json
 
+start=`date +%s`
+
 time singularity run --nv -e \
   -B `pwd`/bids:/bids \
   -B `pwd`/output:/output \
   docker://bids/broccoli:v1.0.0 \
   /bids /output participant --participant_label $sub
+  
+end=`date +%s`
+runtime=$((end-start))
+echo "Runtime for first-level analysis: $runtime seconds"
 
 #tscores thresholding
 tscores=output/sub-${sub}/$taskname/sub-${sub}_tscores_contrast0001_MNI.nii
